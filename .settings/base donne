@@ -1,0 +1,169 @@
+-- Création de la base de données
+CREATE DATABASE IF NOT EXISTS pharmacie_db;
+USE pharmacie_db;
+
+-- 1. Table client
+CREATE TABLE IF NOT EXISTS client (
+    id_client INT NOT NULL AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    adresse VARCHAR(255),
+    telephone VARCHAR(20),
+    PRIMARY KEY (id_client)
+);
+
+-- 2. Table pharmacien
+CREATE TABLE IF NOT EXISTS pharmacien (
+    id_pharmacien INT NOT NULL AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    login VARCHAR(50) NOT NULL UNIQUE,
+    pwd VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_pharmacien)
+);
+
+-- 3. Table gestionnaire
+CREATE TABLE IF NOT EXISTS gestionnaire (
+    id_gestionnaire INT NOT NULL AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    login VARCHAR(50) NOT NULL UNIQUE,
+    pwd VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_gestionnaire)
+);
+
+-- 4. Table medicament
+CREATE TABLE IF NOT EXISTS medicament (
+    id_medicament INT NOT NULL AUTO_INCREMENT,
+    nom VARCHAR(100) NOT NULL,
+    dosage VARCHAR(50),
+    stock INT DEFAULT 0,
+    prix_unitaire DECIMAL(10,2) NOT NULL,
+    seuil_alerte INT DEFAULT 10,
+    description TEXT,
+    PRIMARY KEY (id_medicament)
+);
+
+-- 5. Table commande
+CREATE TABLE IF NOT EXISTS commande (
+    id_commande INT NOT NULL AUTO_INCREMENT,
+    id_gestionnaire INT,
+    id_medicament INT,
+    quantite INT NOT NULL,
+    date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut VARCHAR(20) DEFAULT 'en_attente',
+    date_reception TIMESTAMP NULL,
+    PRIMARY KEY (id_commande),
+    FOREIGN KEY (id_gestionnaire) REFERENCES gestionnaire(id_gestionnaire) ON DELETE SET NULL,
+    FOREIGN KEY (id_medicament) REFERENCES medicament(id_medicament) ON DELETE SET NULL
+);
+
+-- 6. Table vente
+CREATE TABLE IF NOT EXISTS vente (
+    id_vente INT NOT NULL AUTO_INCREMENT,
+    id_pharmacien INT,
+    id_client INT,
+    id_medicament INT,
+    quantite INT NOT NULL,
+    prix_total DECIMAL(10,2) NOT NULL,
+    date_vente TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut VARCHAR(20) DEFAULT 'valide',
+    PRIMARY KEY (id_vente),
+    FOREIGN KEY (id_pharmacien) REFERENCES pharmacien(id_pharmacien) ON DELETE SET NULL,
+    FOREIGN KEY (id_client) REFERENCES client(id_client) ON DELETE SET NULL,
+    FOREIGN KEY (id_medicament) REFERENCES medicament(id_medicament) ON DELETE SET NULL
+);
+
+-- 7. Table stock_historique
+CREATE TABLE IF NOT EXISTS stock_historique (
+    id_historique INT NOT NULL AUTO_INCREMENT,
+    id_medicament INT,
+    quantite_avant INT NOT NULL,
+    quantite_apres INT NOT NULL,
+    type_operation VARCHAR(20) NOT NULL,
+    id_operation INT,
+    date_operation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_historique),
+    FOREIGN KEY (id_medicament) REFERENCES medicament(id_medicament) ON DELETE SET NULL
+);
+
+-- 8. Insertion des données de test (optionnel)
+
+-- Clients
+INSERT INTO client (nom, prenom, email, adresse, telephone) VALUES
+('Martin', 'Sophie', 'sophie.martin@email.com', '12 Rue de la Paix, Paris', '0123456789'),
+('Dubois', 'Jean', 'jean.dubois@email.com', '45 Avenue des Champs, Lyon', '0234567891'),
+('Leroy', 'Marie', 'marie.leroy@email.com', '78 Boulevard Voltaire, Marseille', '0345678912'),
+('Moreau', 'Pierre', 'pierre.moreau@email.com', '33 Rue de la République, Lille', '0456789123'),
+('Bernard', 'Julie', 'julie.bernard@email.com', '21 Rue du Commerce, Toulouse', '0567891234'),
+('Thomas', 'Luc', 'luc.thomas@email.com', '9 Place de la Mairie, Bordeaux', '0678912345'),
+('Robert', 'Claire', 'claire.robert@email.com', '67 Avenue Foch, Nice', '0789123456'),
+('Petit', 'Antoine', 'antoine.petit@email.com', '14 Rue Saint-Michel, Nantes', '0891234567'),
+('Durand', 'Isabelle', 'isabelle.durand@email.com', '55 Rue de la Gare, Strasbourg', '0912345678'),
+('Lefebvre', 'Philippe', 'philippe.lefebvre@email.com', '88 Boulevard Haussmann, Montpellier', '0123456790');
+
+-- Pharmaciens
+INSERT INTO pharmacien (nom, prenom, login, pwd) VALUES
+('Garcia', 'Alice', 'alice.garcia', SHA2('pharma123', 256)),
+('Roux', 'Nicolas', 'nicolas.roux', SHA2('rxsecure', 256)),
+('Simon', 'Elodie', 'elodie.simon', SHA2('medocpass', 256)),
+('Michel', 'David', 'david.michel', SHA2('pharmapwd', 256)),
+('Fournier', 'Caroline', 'caroline.fournier', SHA2('caro2024', 256));
+
+-- Gestionnaires
+INSERT INTO gestionnaire (nom, prenom, login, pwd) VALUES
+('Dupont', 'Marc', 'marc.dupont', SHA2('gest123', 256)),
+('Lambert', 'Cécile', 'cecile.lambert', SHA2('stock2024', 256)),
+('Bonnet', 'Hugo', 'hugo.bonnet', SHA2('commande', 256)),
+('Chevalier', 'Laura', 'laura.chevalier', SHA2('adminpass', 256));
+
+-- Médicaments
+INSERT INTO medicament (nom, dosage, stock, prix_unitaire, seuil_alerte, description) VALUES
+('Doliprane', '1000mg', 150, 2.50, 20, 'Antidouleur et antipyrétique'),
+('Smecta', '3g', 80, 3.20, 15, 'Traitement des diarrhées'),
+('Voltarene', '50mg', 60, 5.80, 10, 'Anti-inflammatoire'),
+('Levothyrox', '75μg', 45, 8.90, 5, 'Traitement de l’hypothyroïdie'),
+('Ventoline', '100μg', 120, 12.30, 30, 'Traitement de l’asthme'),
+('Amoxicilline', '1g', 90, 6.40, 25, 'Antibiotique à large spectre'),
+('Ibuprofène', '400mg', 200, 4.20, 50, 'Anti-inflammatoire non stéroïdien'),
+('Paracétamol', '500mg', 300, 1.80, 40, 'Antidouleur et fièvre'),
+('Oméprazole', '20mg', 110, 7.50, 20, 'Inhibiteur de la pompe à protons'),
+('Xanax', '0.25mg', 40, 15.00, 5, 'Anxiolytique');
+
+-- Commandes
+INSERT INTO commande (id_gestionnaire, id_medicament, quantite, statut, date_reception) VALUES
+(1, 1, 100, 'livree', '2024-03-10 14:30:00'),
+(2, 3, 50, 'livree', '2024-03-12 10:00:00'),
+(3, 5, 200, 'en_attente', NULL),
+(1, 7, 150, 'annulee', NULL),
+(4, 2, 80, 'livree', '2024-03-15 16:45:00');
+
+-- Ventes
+INSERT INTO vente (id_pharmacien, id_client, id_medicament, quantite, prix_total, statut) VALUES
+(1, 1, 1, 2, 5.00, 'valide'),
+(2, 3, 5, 1, 12.30, 'valide'),
+(3, 5, 8, 5, 9.00, 'valide'),
+(1, 2, 3, 3, 17.40, 'annulee'),
+(4, 7, 6, 2, 12.80, 'valide'),
+(5, 4, 9, 1, 7.50, 'valide'),
+(2, 6, 2, 10, 32.00, 'valide'),
+(3, 8, 10, 1, 15.00, 'valide'),
+(1, 9, 4, 2, 17.80, 'valide'),
+(4, 10, 7, 4, 16.80, 'valide');
+
+-- Historique des stocks
+INSERT INTO stock_historique (id_medicament, quantite_avant, quantite_apres, type_operation, id_operation) VALUES
+(1, 150, 100, 'commande', 1),
+(3, 60, 110, 'commande', 2),
+(5, 120, 320, 'commande', 3),
+(7, 200, 50, 'commande', 4),
+(2, 80, 0, 'commande', 5),
+(1, 100, 98, 'vente', 1),
+(5, 320, 319, 'vente', 2),
+(8, 300, 295, 'vente', 3),
+(3, 110, 107, 'vente', 4),
+(6, 90, 88, 'vente', 5);
+
+-- Message de confirmation
+SELECT 'Base de données pharmacie_db créée avec succès!' AS Message;

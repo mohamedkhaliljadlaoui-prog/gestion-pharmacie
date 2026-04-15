@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ALERTE STOCK CRITIQUE - Ventoline</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header { background: #ffc107; color: #856404; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .alert { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; }
+        .info { background: #f8f9fa; padding: 15px; margin: 15px 0; border-left: 4px solid #dc3545; }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px; }
+        strong { color: #333; }
+        .critical { color: #dc3545; font-weight: bold; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>⚠️ ALERTE STOCK CRITIQUE</h2>
+        </div>
+
+        <div class="alert">
+            <p>Le médicament suivant nécessite un réapprovisionnement urgent:</p>
+        </div>
+
+        <div class="info">
+            <p><strong>Médicament:</strong> Ventoline</p>
+            <p><strong>Dosage:</strong> 100µg</p>
+            <p><strong>Stock actuel:</strong> <span class="critical">3 unités</span></p>
+            <p><strong>Seuil d'alerte:</strong> 10 unités</p>
+            <p><strong>État:</strong> <span class="critical">CRITIQUE - ACTION REQUISE</span></p>
+        </div>
+
+        <p style="margin: 20px 0; padding: 15px; background: #d4edda; border-left: 4px solid #28a745;">
+            <strong>Action recommandée:</strong> Veuillez passer une commande de réapprovisionnement dans les plus brefs délais.
+        </p>
+
+        <div class="footer">
+            <p><strong>Destinataire:</strong> gestionnaire@pharmacie.com</p>
+            <p><strong>Date:</strong> 22/01/2026 17:05:53</p>
+            <p><em>Cet email a été généré automatiquement par Pharmacy Manager.</em></p>
+        </div>
+    </div>
+</body>
+</html>
