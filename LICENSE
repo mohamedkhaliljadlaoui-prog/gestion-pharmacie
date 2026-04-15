@@ -1,6 +1,15 @@
+
+---
+
+## ⚖️ Fichier LICENSE (BSD 3-Clause)
+
+Créez un fichier `LICENSE` à la racine avec ce texte :
+
+```text
 BSD 3-Clause License
 
-Copyright (c) 2026, jadlaoui khalil Mohamed
+Copyright (c) 2026, Kenza Benkaab & Khalil Jadlaoui
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
